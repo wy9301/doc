@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en" class="no-focus" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>在线文档管理系统-管理版</title>
+	<link rel="shortcut icon"  th:href="@{/asserts/image/favicons/favicon.png}"/>
+	<link rel="icon" type="image/png" sizes="192x192"  th:href="@{/asserts/image/favicons/favicon-192x192.png}"/>
+	<link rel="apple-touch-icon" sizes="180x180"  th:href="@{/asserts/image/favicons/apple-touch-icon-180x180.png}"/>
+	<link rel="stylesheet" id="css-main" th:href="@{/asserts/css/codebase.min.css}"/>
+	<script th:src="@{/asserts/js/echarts.min.js}"></script>
+</head>
+<body>
+<div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
+	<!-- Side Overlay-->
+	<nav id="sidebar">
+		<!-- Sidebar Scroll Container -->
+		<div id="sidebar-scroll">
+			<!-- Sidebar Content -->
+			<div class="sidebar-content">
+				<!-- Side Header -->
+				<div class="content-header content-header-fullrow px-15">
+					<!-- Mini Mode -->
+					<div class="content-header-section sidebar-mini-visible-b">
+						<!-- Logo -->
+						<span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+									<span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+								</span>
+						<!-- END Logo -->
+					</div>
+					<!-- END Mini Mode -->
+
+					<!-- Normal Mode -->
+					<div class="content-header-section text-center align-parent sidebar-mini-hidden">
+						<!-- Close Sidebar, Visible only on mobile screens -->
+						<!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+						<button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout"
+								data-action="sidebar_close">
+							<i class="fa fa-times text-danger"></i>
+						</button>
+						<!-- END Close Sidebar -->
+
+						<!-- Logo -->
+						<div class="content-header-item">
+							<a class="link-effect font-w700" href="index.html">
+								<i class="si si-fire text-primary"></i>
+								<span class="font-size-xl text-dual-primary-dark">在线文档管理</span><span class="font-size-xl text-primary">系统</span>
+							</a>
+						</div>
+						<!-- END Logo -->
+					</div>
+					<!-- END Normal Mode -->
+				</div>
+				<!-- END Side Header -->
+
+				<!-- Side User -->
+				<div class="content-side content-side-full content-side-user px-10 align-parent">
+					<!-- Visible only in mini mode -->
+					<div class="sidebar-mini-visible-b align-v animated fadeIn">
+						<img class="img-avatar img-avatar32" src="asserts/img/avatars/avatar15.jpg" alt="">
+					</div>
+					<!-- END Visible only in mini mode -->
+
+					<!-- Visible only in normal mode -->
+					<div class="sidebar-mini-hidden-b text-center">
+						<a class="img-link">
+							<img class="img-avatar"th:src="@{/asserts/image/avatars/avatar0.jpg}">
+						</a>
+						<ul class="list-inline mt-10">
+							<li class="list-inline-item">
+								<a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" th:text="${user.getUsername()}">管理员</a>
+							</li>
+							<li class="list-inline-item">
+								<!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+								<a class="link-effect text-dual-primary-dark" data-toggle="layout" data-action="sidebar_style_inverse_toggle"
+								   href="javascript:void(0)">
+									<i class="si si-drop"></i>
+								</a>
+							</li>
+							<li class="list-inline-item">
+								<a class="link-effect text-dual-primary-dark" th:href="@{/user/logout}">
+									<i class="si si-logout"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!-- END Visible only in normal mode -->
+				</div>
+				<!-- END Side User -->
+
+				<!-- Side Navigation -->
+				<div class="content-side content-side-full">
+					<ul class="nav-main">
+						<li>
+							<a class="active" th:href="@{/admin/index}"><i class="si si-cup"></i><span class="sidebar-mini-hide">首页</span></a>
+						</li>
+						<li class="nav-main-heading"><span class="sidebar-mini-visible">UI</span><span class="sidebar-mini-hidden">User
+										Interface</span></li>
+						<li>
+							<a th:href="@{/admin/user_list}"><i class="si si-users"></i><span class="sidebar-mini-hide">用户管理</span></a>
+						</li>
+						<li>
+							<a th:href="@{/syfile/file_list}" ><i class="fa fa-group"></i><span class="sidebar-mini-hide">公共文档管理</span></a>
+						</li>
+					</ul>
+				</div>
+				<!-- END Side Navigation -->
+			</div>
+			<!-- Sidebar Content -->
+		</div>
+		<!-- END Sidebar Scroll Container -->
+	</nav>
+	<!-- END Sidebar -->
+	<!-- Main Container -->
+	<main id="main-container">
+		<!-- Hero -->
+		<div class="bg-image"  style="background-image: url('/doc/asserts/image/bg01.bmp');">
+			<div class="bg-black-op-75">
+				<div class="content  content-full text-center" style="height: 150px;padding-bottom: 10px;">
+					<div class="py-20">
+						<h1 class="h2 font-w700 text-white mb-10">在线文档管理系统-管理版</h1>
+						<h2 class="h5 font-w300 text-white-op mb-0">欢迎使用在线文档管理系统，本系统可高效实时统计上传下载情况，并对文件进行增删改查等操作。</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END Hero -->
+		<!-- Page Content -->
+		<div class="content">
+			<!-- Overview -->
+			<h2 class="content-heading" style="padding-top: 20px;">数据统计</h2>
+			<!--<div class="row gutters-tiny">
+				&lt;!&ndash; All Products &ndash;&gt;
+				<div class="col-md-6 col-xl-4">
+					<a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+						<div class="block-content block-content-full block-sticky-options">
+							<div class="block-options">
+								<div class="block-options-item">
+									<i class="fa fa-circle-o fa-2x text-info-light"></i>
+								</div>
+							</div>
+							<div class="py-20 text-center">
+								<div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo" data-to="3580">0</div>
+								<div class="font-size-sm font-w600 text-uppercase text-muted">上传总量</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				&lt;!&ndash; END All Products &ndash;&gt;
+
+				&lt;!&ndash; Top Sellers &ndash;&gt;
+				<div class="col-md-6 col-xl-4">
+					<a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+						<div class="block-content block-content-full block-sticky-options">
+							<div class="block-options">
+								<div class="block-options-item">
+									<i class="fa fa-star fa-2x text-warning-light"></i>
+								</div>
+							</div>
+							<div class="py-20 text-center">
+								<div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo" data-to="95">0</div>
+								<div class="font-size-sm font-w600 text-uppercase text-muted">下载总量</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				&lt;!&ndash; END Top Sellers &ndash;&gt;
+
+				&lt;!&ndash; Out of Stock &ndash;&gt;
+				<div class="col-md-6 col-xl-4">
+					<a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+						<div class="block-content block-content-full block-sticky-options">
+							<div class="block-options">
+								<div class="block-options-item">
+									<i class="fa fa-warning fa-2x text-danger-light"></i>
+								</div>
+							</div>
+							<div class="py-20 text-center">
+								<div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
+								<div class="font-size-sm font-w600 text-uppercase text-muted">用户总量</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				&lt;!&ndash; END Out of Stock &ndash;&gt;
+			</div>-->
+			<!-- END Overview -->
+			<div class="row gutters-tiny invisible" data-toggle="appear">
+				<!-- Row #2 -->
+				<div class="col-md-12">
+					<div class="block">
+						<div class="block-header">
+							<h3 class="block-title">
+								本周 <small>7天</small>
+							</h3>
+							<div class="block-options">
+								<button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
+										data-action-mode="demo">
+									<i class="si si-refresh"></i>
+								</button>
+								<button type="button" class="btn-block-option">
+									<i class="si si-wrench"></i>
+								</button>
+							</div>
+						</div>
+						<div class="block-content block-content-full">
+							<div id="main" style="width: 1100px;height:300px;padding-left: 20px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END Page Content -->
+	</main>
+	<!-- END Main Container -->
+
+	<!-- Footer -->
+	<footer id="page-footer" class="opacity-0">
+		<div class="content py-20 font-size-xs clearfix">
+			<div class="float-right">
+				Crafted with <i class="fa fa-heart text-pulse"></i> by flyf000
+			</div>
+			<div class="float-left">
+				<a class="font-w600" >SDUT 李逸飞</a> &copy; <span class="js-year-copy">2019</span>
+			</div>
+		</div>
+	</footer>
+	<!-- END Footer -->
+</div>
+<!-- END Page Container -->
+<script th:src="@{/asserts/js/core/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/core/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.scrollLock.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.appear.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.countTo.min.js}"></script>
+<script th:src="@{/asserts/js/core/js.cookie.min.js}"></script>
+<script th:src="@{/asserts/js/codebase.js}"></script>
+
+<script th:src="@{/asserts/js/plugins/chartjs/Chart.bundle.min.js}"></script>
+<script th:src="@{/asserts/js/pages/be_pages_dashboard.js}"></script>
+<script th:inline="javascript" type="text/javascript">
+
+	var myChart = echarts.init(document.getElementById('main'));
+	option = {
+		title: {
+			text: '每日上传下载数据'
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross',
+				label: {
+					backgroundColor: '#6a7985'
+				}
+			}
+		},
+		legend: {
+			data: ['上传', '下载']
+		},
+		toolbox: {
+			feature: {
+				saveAsImage: {}
+			}
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis: [{
+			type: 'category',
+			boundaryGap: false,
+			data: [[${time_list}]]
+		}],
+		yAxis: [{
+			type: 'value'
+		}],
+		series: [{
+			name: '上传',
+			type: 'line',
+			stack: '总量',
+			areaStyle: {},
+			data: [[${up_list}]]
+		},
+			{
+				name: '下载',
+				type: 'line',
+				stack: '总量',
+				areaStyle: {},
+				data: [[${down_list}]]
+			}
+		]
+	};
+	myChart.setOption(option)
+</script>
+</body>
+</html>

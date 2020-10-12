@@ -1,0 +1,55 @@
+server:
+  port: 8888
+
+  servlet:
+    context-path: /doc
+
+# 自定义数据
+web:
+  upload-path: D:/image
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot_doc?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password:
+  mvc:
+    static-path-pattern: /**
+
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+    # 配置发送方信息
+  mail:
+    host: smtp.163.com
+    username: wangyuan9301@163.com  # 邮箱地址
+    password: IHTSEYMANGIHKCWO # 授权码
+    properties:
+       mail:
+         smtp:
+           ssl:
+             enable: true
+
+
+
+logging:
+  level:
+    com.gem.mapper: debug
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+qiniu:
+  accessKey: 3RCFP5z76Wb_Zz66h1YDl0ia71anXBVKPmeEpo7G
+  secretKey: oiS6qCq7sucQoWFA1GnBBdye8U5Px9u_8IHMk_7O
+  bucket: 620doc
+  prefix: http://qd397phsb.bkt.clouddn.com
+

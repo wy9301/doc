@@ -1,0 +1,627 @@
+<!doctype html >
+<html lang="en" class="no-focus" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>在线文档管理系统</title>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="shortcut icon" th:href="@{/asserts/image/favicons/favicon.png}"/>
+    <link rel="icon" type="image/png" sizes="192x192" th:href="@{/asserts/imgage/favicons/favicon-192x192.png}"/>
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/asserts/image/favicons/apple-touch-icon-180x180.png}"/>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" id="css-main" th:href="@{/asserts/css/codebase.min.css}">
+    <link rel="stylesheet" th:href="@{/asserts/js/plugins/datatables/dataTables.bootstrap4.min.css}">
+    <style type="text/css">
+        .mycol {
+            padding: 0 5px;
+        }
+        .mytd {
+            margin: 0px;
+            padding: 0px;
+            width: 1px;
+        }
+    </style>
+</head>
+<body>
+<div id="page-container" class="sidebar-o side-scroll page-header-modern main-content-boxed">
+    <!-- Side Overlay-->
+    <nav id="sidebar">
+        <!-- Sidebar Scroll Container -->
+        <div id="sidebar-scroll">
+            <!-- Sidebar Content -->
+            <div class="sidebar-content">
+                <!-- Side Header -->
+                <div class="content-header content-header-fullrow px-15">
+                    <!-- Mini Mode -->
+                    <div class="content-header-section sidebar-mini-visible-b">
+                        <!-- Logo -->
+                        <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+									<span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+								</span>
+                        <!-- END Logo -->
+                    </div>
+                    <!-- END Mini Mode -->
+
+                    <!-- Normal Mode -->
+                    <div class="content-header-section text-center align-parent sidebar-mini-hidden">
+                        <!-- Close Sidebar, Visible only on mobile screens -->
+                        <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                        <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r"
+                                data-toggle="layout"
+                                data-action="sidebar_close">
+                            <i class="fa fa-times text-danger"></i>
+                        </button>
+                        <!-- END Close Sidebar -->
+
+                        <!-- Logo -->
+                        <div class="content-header-item">
+                                <i class="si si-fire text-primary"></i>
+                                <span class="font-size-xl text-dual-primary-dark">在线文档管理</span><span
+                                    class="font-size-xl text-primary">系统</span>
+                        </div>
+                        <!-- END Logo -->
+                    </div>
+                    <!-- END Normal Mode -->
+                </div>
+                <!-- END Side Header -->
+
+                <!-- Side User -->
+                <div class="content-side content-side-full content-side-user px-10 align-parent">
+                    <!-- Visible only in mini mode -->
+                    <div class="sidebar-mini-visible-b align-v animated fadeIn">
+                        <img class="img-avatar img-avatar32" src="assets/img/avatars/avatar15.jpg" alt="">
+                    </div>
+                    <!-- END Visible only in mini mode -->
+
+                    <!-- Visible only in normal mode -->
+                    <div class="sidebar-mini-hidden-b text-center">
+                        <a class="img-link" >
+                            <img class="img-avatar" th:src="@{/asserts/image/avatars/avatar0.jpg}" alt="">
+                        </a>
+                        <ul class="list-inline mt-10">
+                            <li class="list-inline-item">
+                                <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase"
+                                   th:text="${user.getUsername()}"></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                                <a class="link-effect text-dual-primary-dark" data-toggle="layout"
+                                   data-action="sidebar_style_inverse_toggle"
+                                   href="javascript:void(0)">
+                                    <i class="si si-drop"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="link-effect text-dual-primary-dark" th:href="@{/user/logout}">
+                                    <i class="si si-logout"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END Visible only in normal mode -->
+                </div>
+                <!-- END Side User -->
+
+                <!-- Side Navigation -->
+                <div class="content-side content-side-full">
+                    <ul class="nav-main">
+                        <li>
+                            <a th:href="@{/admin/index}"><i class="si si-cup"></i><span class="sidebar-mini-hide">首页</span></a>
+                        </li>
+                        <li class="nav-main-heading"><span class="sidebar-mini-visible">UI</span><span class="sidebar-mini-hidden">User
+										Interface</span></li>
+                        <li>
+                            <a class="active" th:href="@{/admin/user_list}"><i class="si si-users"></i><span class="sidebar-mini-hide">用户管理</span></a>
+                        </li>
+                        <li>
+                            <a th:href="@{/syfile/file_list}" ><i class="fa fa-group"></i><span class="sidebar-mini-hide">公共文档管理</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END Side Navigation -->
+            </div>
+            <!-- Sidebar Content -->
+        </div>
+        <!-- END Sidebar Scroll Container -->
+    </nav>
+    <!-- END Sidebar -->
+
+    <!-- Header -->
+    <header id="page-header">
+        <!-- Header Content -->
+        <div class="content-header">
+            <!-- Left Section -->
+            <div class="content-header-section">
+                <!-- Toggle Sidebar -->
+                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout"
+                        data-action="sidebar_toggle">
+                    <i class="fa fa-navicon"></i>
+                </button>
+                <!-- END Toggle Sidebar -->
+
+                <!-- Open Search Section -->
+                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout"
+                        data-action="header_search_on">
+                    <i class="fa fa-search"></i>
+                </button>
+                <!-- END Open Search Section -->
+                <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-circle btn-dual-secondary" id="page-header-options-dropdown"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-wrench"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="page-header-options-dropdown">
+                        <h6 class="dropdown-header">Header</h6>
+                        <button type="button" class="btn btn-sm btn-block btn-alt-secondary" data-toggle="layout"
+                                data-action="header_fixed_toggle">Fixed
+                            Mode
+                        </button>
+                        <button type="button" class="btn btn-sm btn-block btn-alt-secondary d-none d-lg-block mb-10"
+                                data-toggle="layout"
+                                data-action="header_style_classic">Classic Style
+                        </button>
+                        <div class="d-none d-xl-block">
+                            <h6 class="dropdown-header">Main Content</h6>
+                            <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10"
+                                    data-toggle="layout" data-action="content_layout_toggle">Toggle
+                                Layout
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    </div>
+                </div>
+                <!-- END Layout Options -->
+            </div>
+            <!-- END Left Section -->
+
+            <!-- Right Section -->
+            <div class="content-header-section">
+                <!-- User Dropdown -->
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span th:text="${user.username}"></span>
+                        <i class="fa fa-angle-down ml-5"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right min-width-150"
+                         aria-labelledby="page-header-user-dropdown">
+                        <a class="dropdown-item" href="javascript:void(0)"
+                           data-action="side_overlay_toggle" data-toggle="modal" data-target="#psw_model">
+                            <i class="si si-wrench mr-5"></i> 修改密码
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" th:href="@{/user/logout}">
+                            <i class="si si-logout mr-5"></i> 退出登录
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END Right Section -->
+        </div>
+        <!-- END Header Content -->
+
+        <!-- Header Search -->
+        <div id="page-header-search" class="overlay-header">
+            <div class="content-header content-header-fullrow">
+                <form th:action="@{/admin/search}" method="post">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <!-- Close Search Section -->
+                            <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                            <button type="button" class="btn btn-secondary" data-toggle="layout"
+                                    data-action="header_search_off">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <!-- END Close Search Section -->
+                        </div>
+                        <input type="text" class="form-control" placeholder="请输入用户名" id="sname" name="sname">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Header Search -->
+
+        <!-- Header Loader -->
+        <!-- Please check out the Activity page under Elements category to see examples of showing/hiding it -->
+        <div id="page-header-loader" class="overlay-header bg-primary">
+            <div class="content-header content-header-fullrow text-center">
+                <div class="content-header-item">
+                    <i class="fa fa-sun-o fa-spin text-white"></i>
+                </div>
+            </div>
+        </div>
+        <!-- END Header Loader -->
+    </header>
+    <!-- END Header -->
+
+    <!-- Main Container -->
+    <main id="main-container">
+        <!-- Page Content -->
+        <div class="content">
+            <h2 class="content-heading">全部用户</h2>
+            <!-- Full Table -->
+            <div class="block">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">用户列表</h3>
+                    <!-- upload Modal -->
+                    <div class="modal" id="modal-normal" tabindex="-1" role="dialog" aria-labelledby="modal-normal"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                                    <div class="block block-themed block-transparent mb-0">
+                                        <div class="block-header bg-primary-dark">
+                                            <h3 class="block-title">添加用户</h3>
+                                            <div class="block-options">
+                                                <button type="button" class="btn-block-option" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <a href="javascript:location.reload();"><i class="si si-close"></i></a>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="block-content" style="padding-bottom: 10px;">
+                                            <div class="form-group">
+                                                <label>用户名</label>
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="请输入用户名" onkeyup="this.value=this.value.replace(/\s+/g,'')" onafterpaste="this.value=this.value.replace(/\s+/g,'')">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>邮箱号</label>
+                                                <input type="text" class="form-control" id="tel" name="tel"
+                                                       placeholder="请输入邮箱" >
+                                                <!--onkeyup="this.value=this.value.replace(/[^\d]/g,'') "-->
+                                            </div>
+                                            <div class="form-group" style="text-align: center;">
+                                                <button type="button" class="btn btn-alt-primary form-control" onclick="add_user()">添加
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mycol">
+                        <button type="button" class="btn btn-outline-primary mr-5 mb-5" data-toggle="modal"
+                                data-target="#modal-normal">
+                            <i class="fa fa-upload mr-5"></i>添加用户
+                        </button>
+                        <button type="button" class="btn btn-outline-danger mr-5 mb-5" onclick="delbatch()">
+                            <i class="fa fa-times mr-5"></i>批量删除
+                        </button>
+                    </div>
+                </div>
+
+                <div class="block-content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-vcenter js-dataTable-full" id="table_file">
+                            <thead>
+                            <tr>
+                                <th></th><!-- checkbox -->
+                                <th class="text-center" style="width: 100px;"><i class="si si-user"></i></th>
+                                <!--head -->
+                                <th hidden="hidden"></th><!-- id -->
+                                <th>用户名</th>
+                                <th style="width: 20%;">邮箱</th>
+                                <th style="width: 20%;">注册时间</th>
+                                <th class="text-center" style="width: 100px;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="one:${list1}">
+                                <td class="mytd">
+                                    <div class="col-6">
+                                        <label class="css-control css-control-secondary css-checkbox">
+                                            <input type="checkbox" class="css-control-input" name="del">
+                                            <span class="css-control-indicator"></span>
+                                        </label>
+                                    </div>
+                                </td><!--var tdd = $(obj).parent().parent().parent().find("td").eq(3);-->
+                                <td class="text-center" >
+                                    <img style="width:30px;height: 30px" th:src="@{'/asserts/image/'+${one.head}}">
+                                </td>
+                                <td hidden="hidden" th:text="${one.id}">用户id</td>
+                                <td class="font-w600" th:text="${one.username}">用户名</td>
+                                <td id="telphone" th:text="${one.tel}">用户邮箱</td>
+                                <td th:text="${one.intime}">注册时间</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip"
+                                                title="删除" onclick="delfile(this)">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip"
+                                                title="更新邮箱" onclick="changename(this)">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END Full Table -->
+        </div>
+        <!-- END Page Content -->
+        <!--model-->
+        <div class="modal" id="psw_model" tabindex="-1" role="dialog" aria-labelledby="modal-normal"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-horizontal" role="form" th:action="@{/admin/adduser}" method="post">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">修改密码</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" style="padding-bottom: 10px;">
+                                <div class="form-group">
+                                    <label>原密码：</label>
+                                    <input type="password" class="form-control" value="" placeholder="" id="oldName" name="oldName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>新密码：</label>
+                                    <input type="password" class="form-control" autocomplete="off" value="" placeholder="密码" id="password" name="password" required>
+                                </div>
+                                <div class="form-group" >
+                                    <label>新密码确认：</label>
+                                    <input type="password" class="form-control" autocomplete="off"  placeholder="确认新密码" id="confirmpwd" name="confirmpwd" required>
+                                </div>
+                                <div class="form-group" style="text-align: center;">
+                                    <button class="btn btn-primary radius" onClick="ch_psw()" id="submitt" name="submitt" type="button" value="提交" >确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--model end-->
+    </main>
+    <!-- END Main Container -->
+    <!-- Footer -->
+    <footer id="page-footer" class="opacity-0">
+        <div class="content py-20 font-size-xs clearfix">
+            <div class="float-right">
+                <i class="fa fa-flag text-pulse"></i>Crafted by 620
+            </div>
+            <div class="float-left">
+                <a class="font-w600">SDUT 620_DOC</a> &copy; <span class="js-year-copy">2020</span>
+            </div>
+        </div>
+    </footer>
+    <!-- END Footer -->
+</div>
+<!-- END Page Container -->
+
+<!-- Codebase Core JS -->
+<script th:src="@{/asserts/js/core/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/core/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.scrollLock.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.appear.min.js}"></script>
+<script th:src="@{/asserts/js/core/jquery.countTo.min.js}"></script>
+<script th:src="@{/asserts/js/core/js.cookie.min.js}"></script>
+<script th:src="@{/asserts/js/codebase.js}"></script>
+<script th:src="@{/asserts/js/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/asserts/js/plugins/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<!-- Page JS Code -->
+<script th:src="@{/asserts/js/pages/be_tables_datatables.js}"></script>
+<script language="JavaScript">//删改
+flag_add = 0;
+var old_name = "";
+function add_user() {
+    $.get("/doc/user/checkUsername?username=" + $("#username").val(), function (data) {
+        if (data == 1) {
+            alert("用户名已存在，请重新输入")
+            $("#user").select();
+        }
+        if(data == 2)
+        {
+            alert("用户名长度小于6位，请重新输入")
+            $("#user").select();
+        }
+        else{
+            var phone =/^\w{3,}(\.\w+)*@[A-z0-9]+(\.[A-z]{2,5}){1,2}$/;
+            var phones = $.trim($("#tel").val());
+            if ($.trim(phones) == "") {
+                /*hit.innerHTML = "请填写邮箱号码！"
+                hint()*/
+                alert("请填写邮箱号码！")
+                $("#tel").focus();
+                return;
+            }
+            if(!phone.exec(phones)){
+                /*hit.innerHTML = "邮箱输入格式不正确,请从新输入"
+                hint()*/
+                alert("邮箱输入格式不正确,请从新输入")
+                $("#tel").focus();
+                return;
+            }
+            else{
+                $.post("/doc/admin/adduser", {username: $("#username").val(), tel:$("#tel").val()}, function (data) {
+                    if (data == 1) {
+                        alert("添加用户成功")
+                        $("#username").val("")
+                        $("#tel").val("")
+                        window.location = "/doc/admin/user_list";
+                    } else {
+                        alert("网络错误，请重试")
+                    }
+                });
+            }
+
+        }
+    });
+    $.ajax({
+        type: 'POST',
+        url: '/doc/user/change_psw',
+        data : {
+            "oldpsw":$("#oldName").val(),
+            "newpsw":txtPwd
+        },
+        success: function(data) {
+            if(data=="1"){
+                alert("修改成功，请重新登陆");
+                window.location = "/doc/user/index";
+            }
+            else if(data=="0")
+                alert("原密码错误！");
+            $("#oldName").focus();
+        },
+        error: function() {
+            alert("网络错误，修改失败");
+        },
+    });
+}
+function ch_psw() {
+    var txtconfirm = $.trim($("#confirmpwd").val());
+    var txtPwd = $("#password").val();
+    if( $.trim(txtconfirm) != $.trim(txtPwd) ) {
+        alert('你输入的密码不匹配，请从新输入！');
+        $("#txtconfirm").focus();
+    }
+    else if(txtPwd.length<6){
+        alert("密码长度需大于等于6位！");
+    }
+    else{
+        $.ajax({
+            type: 'POST',
+            url: '/doc/user/change_psw',
+            data : {
+                "oldpsw":$("#oldName").val(),
+                "newpsw":txtPwd
+            },
+            success: function(data) {
+                if(data=="1"){
+                    alert("修改成功，请重新登陆");
+                    window.location = "/doc/user/index";
+                }
+                else if(data=="0")
+                    alert("原密码错误！");
+                $("#oldName").focus();
+            },
+            error: function() {
+                alert("网络错误，修改失败");
+            },
+        });
+    }
+}
+function changename(obj) {
+
+    var tdd = $(obj).parent().parent().parent().find("td").eq(4);//2用户id  3用户名 4邮箱号
+    old_name = tdd.text();
+    var input = $(
+        "<form><input type='text'/><button type=\"submit\" class=\"btn btn-sm btn-circle btn-alt-success mr-5 mb-5\" onclick=\"submitname(this)\"><i class=\"fa fa-check\"></i></button><button type=\"button\" class=\"btn btn-sm btn-circle btn-alt-danger mr-5 mb-5\"  onclick=\"oldname(this)\"><i class=\"fa fa-times\"></i></button></form>"
+    );
+    tdd.html(input);
+}
+
+function oldname(obj) {
+    var tdd = $(obj).parent().parent().parent().find("td").eq(4);
+    tdd.html(old_name)
+}
+
+function submitname(obj) {
+    var idd = $(obj).parent().parent().parent().find("td").eq(2).text(); //获取当前行的id
+    var name = $(obj).parent().find("input").val();
+    var phone =/^\w{3,}(\.\w+)*@[A-z0-9]+(\.[A-z]{2,5}){1,2}$/;
+    var phones = name;
+    if ($.trim(phones) == "") {
+        alert("请填写邮箱号码！")
+        var tdd = $(obj).parent().parent().parent().find("td").eq(4);
+        var input = $(
+            "<form><input type='text'/><button type=\"submit\" class=\"btn btn-sm btn-circle btn-alt-success mr-5 mb-5\" onclick=\"submitname(this)\"><i class=\"fa fa-check\"></i></button><button type=\"button\" class=\"btn btn-sm btn-circle btn-alt-danger mr-5 mb-5\"  onclick=\"oldname(this)\"><i class=\"fa fa-times\"></i></button></form>"
+        );
+        tdd.html(input);
+        /*$("#telphone").focus();*/
+
+        /*return;*/
+    }
+    else if(!phone.exec(phones)){
+        alert("邮箱输入格式不正确,请从新输入")
+        var tdd = $(obj).parent().parent().parent().find("td").eq(4);
+        var input = $(
+            "<form><input type='text'/><button type=\"submit\" class=\"btn btn-sm btn-circle btn-alt-success mr-5 mb-5\" onclick=\"submitname(this)\"><i class=\"fa fa-check\"></i></button><button type=\"button\" class=\"btn btn-sm btn-circle btn-alt-danger mr-5 mb-5\"  onclick=\"oldname(this)\"><i class=\"fa fa-times\"></i></button></form>"
+        );
+        tdd.html(input);
+        /*$("#telphone").focus();*/
+        /*return;*/
+
+    }
+   else{
+        $.post("/doc/admin/changetel", {
+            id: idd,
+            new_tel: name
+        },function (data)
+        {
+            if(data==1)
+            window.location="/doc/admin/user_list";
+            else
+                alert("修改失败！")
+        }
+        );
+      }
+}
+
+function delfile(obj) {
+    var idd = $(obj).parent().parent().parent().find("td").eq(2).text(); //获取当前行的id
+    $.post("/doc/admin/delete", {
+        id: idd,
+    }, function () {
+        del($(obj).parent().parent().parent())
+    });
+}
+
+function remove_this(obj) {
+    $(obj).parent().parent().parent().remove(); //移除当前行
+    flag_add = 0;
+}
+
+function del(obj) {
+    $(obj).remove(); //移除当前行
+    Tlen = $("#table_share").find("tr").length;
+    $("#number-share").text(Tlen);
+
+}
+function delbatch() {
+    var st = "";
+    var checkData = new Array();
+    var delSize = $("[name=del]:checked").length;//通过筛选 name=del 且已选中获得的元素对象数组 来得到选中的数量
+    var length = 0;
+    $("[name=del]:checked").each(function(){//遍历已选中的checked数组
+        length++;
+        checkData.push($(this).parent().parent().parent().parent().find("td").eq(2).text());
+        del($(this).parent().parent().parent().parent())
+    });
+    $.post("/doc/admin/deletelist",
+        {
+            checkData:checkData
+        }, function() {
+            alert("删除成功")
+        })
+}
+</script>
+</body>
+</html>
